@@ -1,27 +1,20 @@
-import 'package:alura_pt_02/database/app_database.dart';
-import 'package:alura_pt_02/database/dao/contacts_dao.dart';
-import 'package:alura_pt_02/models/contact.dart';
 import 'package:flutter/material.dart';
+import 'package:notes_first/models/note.dart';
 
-import 'contact_form.dart';
-
-class ContactsList extends StatefulWidget {
+class NotesList extends StatefulWidget {
   @override
-  _ContactsListState createState() => _ContactsListState();
+  _NotesLsitState createState() => _NotesLsitState();
 }
 
-class _ContactsListState extends State<ContactsList> {
-  final ContactDao _dao = ContactDao();
-
+class _NotesLsitState extends State<NotesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transfer'),
+        title: Text('Your Notes'),
       ),
-      body: FutureBuilder<List<Contact>>(
+      body: FutureBuilder<List>(
         initialData: List(),
-        future: _dao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -41,10 +34,10 @@ class _ContactsListState extends State<ContactsList> {
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              final List<Contact> contacts = snapshot.data;
+              final List<Note> contacts = snapshot.data;
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  final Contact contact = contacts[index];
+                  final Note contact = contacts[index];
                   return _ContactItem(contact);
                 },
                 itemCount: contacts.length,
@@ -56,26 +49,20 @@ class _ContactsListState extends State<ContactsList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(
-            MaterialPageRoute(
-              builder: (context) => ContactForm(),
-            ),
-          )
-              .then(
-                (value) => setState(() {}),
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotesForm(),),).then(value) => setState((){}),
+          child:
+          Icon(
+            Icons.add,
+            size: 24.0,
           );
         },
-        child: Icon(
-          Icons.add,
-        ),
       ),
     );
   }
 }
 
 class _ContactItem extends StatelessWidget {
-  final Contact contact;
+  final Note contact;
 
   _ContactItem(this.contact);
 
@@ -84,13 +71,13 @@ class _ContactItem extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(
-          contact.name,
+          contact.titleNote,
           style: TextStyle(
             fontSize: 24.0,
           ),
         ),
         subtitle: Text(
-          contact.accountNumber.toString(),
+          contact.textNote.toString(),
           style: TextStyle(
             fontSize: 16.0,
           ),
